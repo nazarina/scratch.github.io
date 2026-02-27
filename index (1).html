@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>линейный алгоритм | урок 1</title>
+    <style>
+       :root {
+        --soft-pink: #fff0f3;
+        --soft-purple: #f3f0ff;
+        --accent-color: #008080; 
+        --deep-accent: #800000; /* Тот самый бордовый */
+        --text-main: #4a4a4a;
+        --text-muted: #7f8c8d;
+        --white: #ffffff;
+        --button-grad: linear-gradient(to top, #800000 0%, #d63031 100%);
+    }
+
+    body {
+        /* Светлый спокойный градиент на весь фон с использованием твоего soft-pink */
+        background: linear-gradient(120deg, var(--soft-pink) 0%, #ebedee 100%);
+        color: var(--text-main);
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* 1. Обложка в светлых тонах */
+    .hero {
+        height: 40vh;
+        background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
+                    url('https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        /* Нижняя граница теперь бордовая для солидности */
+        border-bottom: 4px solid var(--deep-accent);
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        margin: 0;
+        color: var(--accent-color);
+        letter-spacing: 1px;
+    }
+
+    .hero p {
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    /* Контентные секции */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .section {
+        margin-bottom: 60px;
+        background: var(--white);
+        padding: 40px;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        /* Тонкая рамка в цвет акцента */
+        border: 1px solid rgba(0, 128, 128, 0.1);
+    }
+
+    h2 {
+        color: var(--accent-color);
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        /* Полоска слева теперь бордовая — это выглядит очень стильно */
+      
+    }
+
+    /* Алгоритм в жизни */
+    .algo-life {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        background: var(--soft-purple);
+        padding: 25px;
+        border-radius: 20px;
+    }
+
+    /* Интерфейс */
+    .interface-img {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin-top: 15px;
+    }
+
+    /* Проекты */
+    .project-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    iframe {
+        /* Рамка iframe теперь нежно-сиреневая */
+        border: 8px solid var(--soft-purple);
+        border-radius: 25px;
+        max-width: 100%;
+        background: white;
+    }
+
+    /* Контейнер для шагов и картинки РЯДОМ */
+    .instruction-wrapper {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+
+    .steps-list {
+        flex: 1; 
+        text-align: left;
+        background: #fafafa;
+        padding: 25px;
+        border-radius: 20px;
+        /* Пунктир в цвете Teal */
+        border: 1px dashed var(--accent-color);
+    }
+
+    .step-image {
+        flex: 0 0 300px; 
+        border-radius: 15px;
+        /* Рамка картинки в цвете нежного розового */
+        border: 3px solid var(--soft-pink);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    /* Кнопки с мягким свечением */
+    .glow-button {
+        margin: 30px 0;
+        padding: 16px 45px;
+        font-size: 1rem;
+        color: #fff;
+        background: var(--button-grad);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-transform: lowercase;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        /* Тень в тон бордового */
+        box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
+        font-weight: 600;
+    }
+
+    .glow-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(128, 0, 0, 0.4);
+        opacity: 0.95;
+    }
+
+    .steps-list h3 {
+        margin-top: 0;
+        color: var(--text-main);
+        font-size: 1.1rem;
+    }
+
+    .steps-list li {
+        margin-bottom: 12px;
+        color: var(--text-main);
+    }
+
+    footer {
+        text-align: center;
+        padding: 50px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Урок 1. Линейный алгоритм</h1>
+        <p>Как компьютер понимает наши команды</p>
+    </header>
+
+    <div class="container">
+        
+        <section class="section">
+            <h2>Что такое алгоритм?</h2>
+            <p>Это простая последовательность шагов.</p>
+            <div class="algo-life">
+                <div style="font-size: 3rem;">🫧</div>
+                <div>
+                    <strong>Пример из жизни: пускаем мыльные пузыри</strong><br>
+                    1. Открыть баночку → 2. Опустить палочку → 3. Плавно подуть.<br>
+                    Если сначала подуть, а потом открыть баночку — магии не случится!
+                </div>
+            </div>
+          <p><strong>Программа</strong> — это алгоритм, написанный на языке, который понимает компьютер. В нашем случае — на языке цветных блоков Scratch.</p>
+        </section>
+      
+      <section class="section" style="text-align: center;">
+            <h2>Тренировка: составляем алгоритмы</h2>
+            <p>Давай поможем Роботу выполнить задание! Здесь тебе нужно выстроить команды в правильном порядке, чтобы дойти до цели.</p>
+            
+            <div class="algo-life" style="margin-bottom: 25px; justify-content: center;">
+                <span style="font-size: 1.5rem;">🤖</span>
+                <span>Помни: Робот делает только то, что написано в твоей программе.</span>
+            </div>
+
+            <a href="https://kpolyakov.spb.ru/school/blockly/robot_linear.html?level=1" target="_blank" class="glow-button">
+                перейти к заданию
+            </a>
+        </section>
+
+        <section class="section">
+            <h2>Интерфейс scratch</h2>
+            <p>Слева — наши блоки-команды, в центре — поле для творчества, справа — результат.</p>
+            <img src="https://robx.org/wp-content/uploads/2021/07/image-36.png" alt="интерфейс scratch" class="interface-img">
+          <div class="steps-list" style="margin-top: 20px; border-style: solid; border-width: 1px;">
+        <ul style="list-style-type: none; padding: 0;">
+            <li><strong>1. палитра блоков</strong> — меню со всеми командами, разделенными по цветам.</li>
+            <li><strong>2. область кода</strong> — место, где ты соединяешь блоки в алгоритм.</li>
+            <li><strong>3. сцена</strong> — экран, на котором твой герой оживает.</li>
+            <li><strong>4. спрайты</strong> — список всех персонажей твоего проекта.</li>
+            <li><strong>5. фоны</strong> — настройки места действия (декорации).</li>
+        </ul>
+    </div>
+        </section>
+
+        <section class="section project-box">
+            <h2>Мини-проект: следуй за звездой</h2>
+            <iframe src="https://scratch.mit.edu/projects/1281492596/embed" style="margin-bottom:20px" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen ></iframe>
+           <a href="https://scratch.mit.edu/" target="_blank" class="glow-button">Перейти в Scratch</a>
+            <div class="instruction-wrapper">
+                <div class="steps-list">
+                <h3>Алгоритм действий:</h3>
+                <ol>
+                    <li>Выбери фон <strong>Звездное небо</strong>.</li>
+                    <li>Добавь спрайт <strong>Star (Звездочка)</strong>.</li>
+                    <li>Запускающая команда: <strong>Когда флажок нажат</strong>.</li>
+                    <li>Движение: <strong>Повернуться к указателю мыши</strong> + <strong>Идти 10 шагов</strong>.</li>
+                    <li>Управление: Помести блоки внутрь цикла <strong>Повторять всегда</strong>.</li>
+                    <li>Эксперимент: Измени число шагов (скорость).</li>
+                </ol>
+            </div>
+                <img src="https://raw.githubusercontent.com/nazarina/Cours/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-20%20080223.png" alt="скрипт звезды" class="step-image" width="40%">
+            </div>
+            
+        </section>
+      
+      <section class="section" style="border: 2px solid #a29bfe; background: #f8f7ff;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 2rem;">✨</span>
+        <h2 style="margin: 0; border: none; padding: 0;">Важно</h2>
+    </div>
+    <p style="margin-top: 15px; font-weight: 500;">
+        Чтобы твоя работа не пропала, не забудь нажать кнопку <strong>«Сохранить сейчас»</strong> в верхнем правом углу экрана. 
+    </p>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0;">
+        Компьютер запомнит твой код, и ты сможешь вернуться к нему в любое время.
+    </p>
+</section>
+
+        <section class="section project-box">
+            <h2>Мини-проект: подводный мир</h2>
+            <iframe src="https://scratch.mit.edu/projects/1206593048/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            
+            <a href="https://scratch.mit.edu/projects/1206595174" target="_blank" class="glow-button">открыть заготовку</a>
+<div class="instruction-wrapper">
+                <div class="steps-list">
+                <h3>Как это сделать:</h3>
+                <ol>
+                    <li>Нажми кнопку<strong> "Открыть заготовку"</strong> и сделай <strong>Ремикс</strong>.</li>
+                    <li>Выбери рыбку, которую хочешь оживить первой.</li>
+                    <li>Собери алгоритм движения:
+                        <ul>
+                            <li>Блок <strong>Идти (...) шагов</strong>.</li>
+                            <li>Блок <strong>Если касается края, оттолкнуться</strong>.</li>
+                            <li>Цикл <strong>Повторять всегда</strong>.</li>
+                            <li>В настройках спрайта выбери стиль вращения <strong>Влево-вправо</strong>.</li>
+                        </ul>
+                    </li>
+                    <li style="text-decoration:underline; display:inline-block; background-color:var(--soft-purple)">Запрограммируй так каждую рыбку.</li>
+                    <li><strong>Эксперимент:</strong> установи рыбкам разное количество шагов, чтобы они плавали с разной скоростью.</li>
+                </ol>
+            </div>
+                <img src="https://raw.githubusercontent.com/nazarina/Cours/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-20%20080339.png" alt="скрипт рыбки" class="step-image" width="40%">
+            </div>
+            
+        </section>
+
+    </div>
+
+    <footer>
+        Заботливое образование • 2026 
+    </footer>
+
+</body>
+</html>
