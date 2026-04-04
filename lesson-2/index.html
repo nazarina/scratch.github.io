@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 2 | Работа с циклами и графикой</title>
+    <style>
+        :root {
+            --soft-pink: #fff0f3;
+            --soft-purple: #f3f0ff;
+            --accent-color: #008080; 
+            --deep-accent: #800000; /* Тот самый бордовый */
+            --text-main: #4a4a4a;
+            --white: #ffffff;
+            --button-grad: linear-gradient(to top, #800000 0%, #d63031 100%);
+        }
+
+        body {
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .hero {
+            height: 30vh;
+            background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), 
+                        url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 3px solid var(--deep-accent); /* Тонкий бордовый акцент */
+        }
+
+        .lesson-number {
+            background: var(--deep-accent); /* Номер урока теперь бордовый */
+            color: white;
+            padding: 5px 25px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(128, 0, 0, 0.2);
+        }
+
+        .container { max-width: 950px; margin: 0 auto; padding: 40px 20px; }
+
+        .section {
+            margin-bottom: 50px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0, 128, 128, 0.05);
+        }
+
+        h2 { 
+            color: var(--accent-color); 
+            font-size: 1.8rem; 
+        
+            padding-left: 15px; 
+            margin-bottom: 25px; 
+          }
+        
+        h3 { color: var(--text-main); font-size: 1.3rem; margin-top: 0; }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .quiz-card {
+            background: var(--soft-purple);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(128, 0, 0, 0.05);
+        }
+
+        .quiz-image-box {
+            background: white;
+            margin-top: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            filter: blur(15px);
+            transition: filter 0.4s ease, border 0.3s;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            border: 2px solid transparent;
+        }
+
+        .quiz-image-box.reveal { 
+            filter: blur(0); 
+            border: 2px solid var(--accent-color);
+        }
+        
+        .quiz-image-box img { max-width: 100%; height: auto; }
+.lesson-join-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 50px;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
+        text-decoration: none;
+        background: linear-gradient(135deg, #800000 0%, #d63031 100%);
+        border-radius: 60px;
+        box-shadow: 0 10px 25px rgba(128, 0, 0, 0.3);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        animation: buttonPulse 2s infinite;
+    }
+
+    .lesson-join-button:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(128, 0, 0, 0.4);
+        filter: brightness(1.1);
+    }
+
+    .lesson-join-button .icon {
+        font-size: 1.8rem;
+    }
+
+    /* Анимация пульсации, чтобы привлечь внимание */
+    @keyframes buttonPulse {
+        0% { box-shadow: 0 0 0 0 rgba(128, 0, 0, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(128, 0, 0, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(128, 0, 0, 0); }
+    }
+        .character-card {
+            background: #fafafa;
+            border-radius: 25px;
+            padding: 25px;
+            border: 1px solid var(--soft-purple);
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .char-preview { width: 100px; height: 100px; object-fit: contain; }
+        
+        .code-img {
+            max-width: 300px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .glow-button {
+            padding: 14px 40px;
+            color: #fff;
+            background: var(--button-grad);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(128, 0, 0, 0.55); /* Тень в тон бордового */
+            margin: 15px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .glow-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(128, 0, 0, 0.65);
+        }
+
+        .dual-frames {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        iframe { border: 6px solid var(--soft-pink); border-radius: 20px; width: 100%; height: 350px; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-grid, .character-card, .dual-frames { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
+            .code-img { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="lesson-number">Урок №2</div>
+        <h1>Циклы и графические эффекты</h1>
+    </header>
+
+    <div class="container">
+        <div style="text-align: center; margin: 40px 0;">
+    <a href="https://us05web.zoom.us/j/85651444780?pwd=h9aWYPVlCGHNYNpRhQiegezgJX4WL2.1" target="_blank" class="lesson-join-button">
+        <span class="icon">🚀</span> Присоединиться к уроку
+    </a>
+</div>
+        
+        <section class="section">
+            <h2>Повторение: линейные алгоритмы</h2>
+            <p>Нажми на блок под вопросом, чтобы увидеть правильную команду!</p>
+            <div class="quiz-grid">
+                <div class="quiz-card">
+                    <span>Как идти вперед?</span>
+                    <div class="quiz-image-box" onclick="this.classList.toggle('reveal')">
+                        <img src="https://raw.githubusercontent.com/nazarina/lesson-2/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-27%20082429.png" alt="Блок идти 10 шагов">
+                    </div>
+                </div>
+                <div class="quiz-card">
+                    <span>Как следить за мышкой?</span>
+                    <div class="quiz-image-box" onclick="this.classList.toggle('reveal')">
+                        <img src="https://raw.githubusercontent.com/nazarina/lesson-2/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-27%20082357.png" alt="Блок повернуться к мышке">
+                    </div>
+                </div>
+                <div class="quiz-card">
+                    <span>Какой блок делает движения плавными?</span>
+                    <div class="quiz-image-box" onclick="this.classList.toggle('reveal')">
+                        <img src="https://raw.githubusercontent.com/nazarina/lesson-2/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-27%20082445.png" alt="Блок плыть в точку">
+                    </div>
+                </div>
+                <div class="quiz-card">
+                    <span>Как не убежать за край?</span>
+                    <div class="quiz-image-box" onclick="this.classList.toggle('reveal')">
+                        <img src="https://github.com/nazarina/lesson-2/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-02-27%20082415.png?raw=true" alt="Блок если касается края">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="text-align: center; background: var(--soft-purple);">
+            <h2>Разминка: алгоритм для робота</h2>
+            <p>Вспомни, как строить цепочки команд без ошибок.</p>
+            <a href="https://kpolyakov.spb.ru/school/blockly/robot_linear.html?level=5" target="_blank" class="glow-button">Запустить тренажер</a>
+        </section>
+
+        <section class="section">
+            <h2>Проект: подводный мир</h2>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <iframe src="https://scratch.mit.edu/projects/1284139770/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>
+                <br>
+                <a href="https://scratch.mit.edu/projects/1284357821" class="glow-button" target="_blank">Открыть заготовку</a>
+            </div>
+
+            <div class="character-card">
+                <img src="https://github.com/nazarina/lesson-2/blob/main/pngtree-baby-seahorse-clipart-png-image_16059733.png?raw=true" class="char-preview" alt="Конек">
+                <div style="flex: 1;">
+                    <h3>Морской конек</h3>
+                    <p>Он может менять свою окраску, полностью сливаться с фоном, защищаться от хищников и маскироваться при охоте. Используем цикл <strong>всегда</strong> и эффект <strong>цвет</strong>.</p>
+                </div>
+                <img src="https://raw.githubusercontent.com/nazarina/lesson-2/refs/heads/main/3%D1%81.png" class="code-img" alt="Код конька">
+            </div>
+
+            <div class="character-card">
+                <img src="https://github.com/nazarina/lesson-2/blob/main/pngtree-cute-cartoon-jellyfish-with-blue-body-and-smiling-face-clipart-illustration-png-image_19987858.png?raw=true" class="char-preview" alt="Медуза">
+                <div style="flex: 1;">
+                    <h3>Медуза</h3>
+                    <p>Медузы почти прозрачные. С помощью цикла <strong>повторить 10 раз</strong> мы заставим её плавно таять и появляться снова.</p>
+                </div>
+                <img src="https://github.com/nazarina/lesson-2/blob/main/2%D1%81.png?raw=true" class="code-img" alt="Код медузы">
+            </div>
+
+            <div class="character-card">
+                <img src="https://github.com/nazarina/lesson-2/blob/main/pngtree-puffer-fish-png-image_13893209.png?raw=true" class="char-preview" alt="Рыба-еж">
+                <div style="flex: 1;">
+                    <h3>Рыба-еж</h3>
+                    <p>Когда рыба-еж пугается, она раздувается! Напишем цикл для плавного <strong>изменения размера</strong> туда и обратно.</p>
+                </div>
+                <img src="https://github.com/nazarina/lesson-2/blob/main/4%D1%81.png?raw=true" class="code-img" alt="Код рыбы">
+            </div>
+
+            <div class="character-card">
+                <img src="https://github.com/nazarina/lesson-2/blob/main/Octopus-Download-Transparent-PNG-Image.png?raw=true" class="char-preview" alt="Осьминог">
+                <div style="flex: 1;">
+                    <h3>Осьминог</h3>
+                    <p>Осьминог умеет закручивать щупальца и изгибаться. Используем эффект <strong>завихрение (whirl)</strong> в цикле.</p>
+                </div>
+                <img src="https://github.com/nazarina/lesson-2/blob/main/1%D1%81.png?raw=true" class="code-img" alt="Код осьминога">
+            </div>
+        </section>
+
+        <section class="section" style="text-align: center;">
+            <h2>Творческий проект: открытка для мамы</h2>
+            <p>Выбери стиль своей открытки и используй циклы для анимации цветов и сердечек.</p>
+            
+            <div class="dual-frames">
+               <iframe src="https://scratch.mit.edu/projects/1142022133/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>
+                <iframe src="https://scratch.mit.edu/projects/1142566186/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+            <br>
+            <a href="https://scratch.mit.edu/projects/editor/" target="_blank" class="glow-button">Перейти на платформу</a>
+        </section>
+
+    </div>
+
+    <footer>Заботливое образование • 2026</footer>
+</body>
+</html>
