@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мастер-класс: Ожившая сказка</title>
+    <style>
+        :root {
+            /* Фирменная цветовая гамма, которую я запомнил */
+            --soft-pink: #fff0f3;
+            --soft-purple: #f3f0ff;
+            --accent-color: #008080;
+            --deep-accent: #800000;
+            --text-main: #4a4a4a;
+            --white: #ffffff;
+            --button-grad: linear-gradient(to top, #800000 0%, #d63031 100%);
+            --scratch-orange: #ffab19;
+            --success: #4caf50;
+        }
+
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+            line-height: 1.8; /* ИЗМЕНЕНИЕ: Больше воздуха в тексте */
+            
+            /* ИЗМЕНЕНИЕ: Фон в точечку на все страницы */
+            background-color: #e0f7fa;
+            background-image: radial-gradient(#ffffff 15%, transparent 16%);
+            background-size: 30px 30px;
+        }
+
+        .lesson-container {
+            max-width: 900px; width: 95%;
+            margin: 20px; padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .marker {
+    background-color: var(--soft-purple); /* Светлый фон из твоей палитры */
+    color: var(--deep-accent);           /* Темно-бордовый для текста */
+    padding: 2px 8px;
+    border-radius: 8px;                  /* Скругление как у блоков Scratch */
+    border: 1px solid rgba(128, 0, 0, 0.2); /* Тонкая бордовая рамка */
+    font-weight: bold;
+    font-family: 'Comfortaa', sans-serif;
+    white-space: nowrap;                 /* Чтобы название блока не разрывалось */
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05); /* Легкий объем */
+    margin: 0 2px;
+}
+
+        /* Баннер вместо кнопки */
+        .main-banner {
+            text-align: center;
+            background: var(--soft-purple);
+            padding: 40px 20px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            border: 4px dashed var(--accent-color); /* Фирменный штрих */
+        }
+
+        .main-banner h1 {
+            color: var(--deep-accent);
+            font-size: 2.8em;
+            margin: 0;
+            text-shadow: 2px 2px 0 var(--white);
+        }
+
+        .glow-text {
+            color: #00bcd4;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-top: 10px;
+            display: block;
+        }
+
+        /* Викторина */
+        .quiz-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 30px;
+            margin-bottom: 40px;
+            border: 2px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .question { margin-bottom: 20px; display: none; }
+        .question.active { display: block; }
+        
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .option-btn {
+            padding: 12px;
+            border: 2px solid var(--accent-color);
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .option-btn:hover { background: var(--soft-pink); }
+        .correct { background: var(--success) !important; color: white; }
+        .wrong { background: #ff5252 !important; color: white; }
+
+        /* Блок с алгоритмом (LEGO) */
+        .algorithm-box {
+            background: #fff9c4;
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 8px solid #fbc02d;
+            margin-bottom: 30px;
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        /* План работы (2 колонки на десктопе) */
+        .plan-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .card img {
+            width: 100%; height: 250px;
+            object-fit: contain;
+            cursor: zoom-in;
+            background: #fdfdfd;
+            border-radius: 10px;
+        }
+
+        h2 { color: var(--deep-accent); text-align: center; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 5px;}
+
+        /* Поле для плана */
+        .plan-input-section {
+            background: #e1f5fe;
+            padding: 25px;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            border-radius: 20px;
+            border: 2px solid var(--accent-color);
+            padding: 15px;
+            font-family: inherit;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            margin-top: 10px;
+            resize: none;
+            line-height: 1.5; /* Немного меньше, чем основной текст, для удобства печати */
+        }
+
+        /* Кнопка "Перейти в Scratch" */
+     .btn-scratch {
+    display: inline-block;
+    padding: 15px 40px;
+    /* Бордовый градиент */
+    background: linear-gradient(to top, #800000 0%, #d63031 100%);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+    
+    /* Эффект парения и свечения */
+    box-shadow: 0 10px 20px rgba(128, 0, 0, 0.3), 
+                0 6px 6px rgba(128, 0, 0, 0.2);
+    
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+}
+
+.btn-scratch:hover {
+    /* При наведении кнопка поднимается выше, а свечение усиливается */
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(128, 0, 0, 0.4), 
+                0 0 15px rgba(214, 48, 49, 0.5);
+    filter: brightness(1.1);
+}
+
+.btn-scratch:active {
+    /* Эффект нажатия */
+    transform: translateY(1px);
+    box-shadow: 0 5px 10px rgba(128, 0, 0, 0.4);
+}
+
+        /* Модалка */
+        #img-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: white;
+            justify-content: center; align-items: center;
+            cursor: zoom-out;
+        }
+        #img-modal img { max-width: 90%; max-height: 90%; }
+
+        @media (max-width: 768px) {
+            .plan-grid { grid-template-columns: 1fr; }
+            .options { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2em; }
+            .main-banner { padding: 30px 15px; }
+            .algorithm-box { flex-direction: column; align-items: flex-start;}
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="lesson-container">
+
+    <div class="main-banner">
+        <h1>Ожившая сказка</h1>
+        <div class="glow-text">Создаём свой мультфильм! 🎬✨</div>
+    </div>
+
+    <div class="quiz-section" id="quiz-container">
+        <h3 style="text-align: center; margin-top: 0; color: var(--accent-color);">🕵️ Давай повторим!</h3>
+        <div  id="quiz-container">
+       
+        
+        <div id="q1" class="question active">
+            <p><b>1. В какой точке окажется герой, если отправить его в координаты X: 0, Y: 0?</b></p>
+            <div class="options">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q1')">Ровно в центре сцены</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q1')">В левом верхнем углу</button>
+            </div>
+        </div>
+
+        <div id="q2" class="question">
+            <p><b>2. Какой блок поможет одному герою «позвать» другого, чтобы тот начал действовать?</b></p>
+            <div class="options">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q2')">Передать сообщение</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q2')">Спросить и ждать</button>
+            </div>
+        </div>
+
+        <div id="q3" class="question">
+            <p><b>3. Куда посмотрит спрайт, если задать ему «повернуть в направлении 0»?</b></p>
+            <div class="options">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q3')">Вверх</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q3')">Направо</button>
+            </div>
+        </div>
+
+        <div id="q4" class="question">
+            <p><b>4. Какой блок заставит героя выполнять действия бесконечно, пока мы сами не остановим программу?</b></p>
+            <div class="options">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q4')">Повторять всегда</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q4')">Повторить 10 раз</button>
+            </div>
+        </div>
+
+        <div id="q5" class="question">
+            <p><b>5. Как сделать изменение размера или цвета плавным, а не мгновенным?</b></p>
+            <div class="options">
+                <button class="option-btn" onclick="checkAnswer(this, true, 'q5')">Использовать цикл с малым шагом</button>
+                <button class="option-btn" onclick="checkAnswer(this, false, 'q5')">Просто нажать на блок один раз</button>
+            </div>
+        </div>
+
+        <div id="quiz-result" style="display:none; text-align: center;">
+            <p>🎉 <b>Потрясающе! Ты настоящий мастер кода. Переходим к проекту!</b></p>
+        </div>
+    </div>
+        <div id="quiz-result" style="display:none; text-align: center;">
+            <p>🎉 <b>Молодец! Ты готов к новой теме!</b></p>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <h2>Что мы будем делать?</h2>
+    </div>
+    
+    <p>Разве не хочется, чтобы герои любимых книг начали двигаться и говорить? Сегодня получится стать настоящими режисером и создателем мультфильмов! Мы возьмём простую историю и «оживим» её с помощью кода.</p>
+
+    <div class="algorithm-box">
+        <span style="font-size: 40px;">💡</span>
+        <div>
+       
+            <strong>🤖 Сказка про Робота-пылесоса по имени Вжик</strong><br>
+            Вжик спокойно убирал квартиру, как вдруг увидел на ковре... <b>кота!</b> Кот преградил ему путь. <br><br>
+            — <i>"Уйди, пожалуйста, я должен дочистить ковер"</i>, — сказал Вжик. <br>
+            — <i>"Мяу! Сначала поймай мой хвост!"</i> — ответил Кот и прыгнул в сторону. <br><br>
+            Вжик включил турбо-режим и началась веселая погоня!
+            <p><i>Это просто, весело и дает волю фантазии!</i></p>
+        </div>
+    </div>
+
+      <section class="card">
+        <h2>Вдохновение</h2>
+        <div class="examples-gallery">
+            <div class="example-item">
+                <div class="frame-placeholder"><iframe src="https://scratch.mit.edu/projects/303692640/embed"></iframe></div>
+            
+            </div>
+            <div class="example-item">
+                <div class="frame-placeholder"><iframe src="https://scratch.mit.edu/projects/1293344149/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe></div>
+                
+            </div>
+            
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <h2>Как придумать план сказки?</h2>
+    </div>
+
+    <div class="plan-grid">
+        <div class="card">
+            <img src="https://github.com/nazarina/lesson-6/blob/main/1.png?raw=true">
+            <h3>1. Выбери героев</h3>
+            <p>Добавь 2-3 спрайта, которые будут участвовать в сказке. Кто будет добрым, а кто — вредным? Или, может, они оба просто любят поболтать?</p>
+        </div>
+        <div class="card">
+            <img src="https://github.com/nazarina/lesson-6/blob/main/2.png?raw=true">
+            <h3>2. Настрой фон</h3>
+            <p>Где происходит действие? В лесу, в замке, в подводном царстве, на космической станции или даже в твоей комнате?</p>
+        </div>
+      
+      <div class="card">
+            <img src="https://github.com/nazarina/lesson-6/blob/main/3.png?raw=true">
+            <h3>2. Кто говорит, а кто молчит?</h3>
+            <p>Спланируй диалог так, чтоб герои не перебивали друг друга. Если один персонаж <span class="marker">говорит 3 секунды</span>, то второй <span class="marker">ждет 3 секунды</span>.</p>
+        </div>
+
+      <div class="card">
+            <img src="https://github.com/nazarina/lesson-6/blob/main/Gemini_Generated_Image_qo52vfqo52vfqo52.png?raw=true">
+            <h3>Что случилось?</h3>
+            <p>В любой сказке должно быть событие: кто-то потерялся, кто-то нашел клад или кто-то решил отправиться в путешествие.</p>
+        </div>
+    </div>
+
+    <div class="plan-input-section">
+        <h3>📝 Составь свой сценарий</h3>
+        <p>Напиши коротко: кто твои герои и что произойдет в твоей сказке?</p>
+        <textarea placeholder="Например: Кот в сапогах встречает дракона и они вместе пьют чай..."></textarea>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <p>✨ <b>Когда план готов — пора приступать!</b></p>
+        
+        <a href="https://scratch.mit.edu/projects/editor/" class="btn-scratch" target="_blank">Перейти в Scratch 🚀</a>
+    </div>
+
+</div>
+
+<div id="img-modal"><img src="" id="modal-img"></div>
+
+<script>
+    // Логика викторины
+    function checkAnswer(btn, isCorrect, qId) {
+        const options = btn.parentElement.querySelectorAll('.option-btn');
+        options.forEach(opt => opt.disabled = true);
+        
+        if (isCorrect) {
+            btn.classList.add('correct');
+            setTimeout(() => {
+                const currentQ = document.getElementById(qId);
+                currentQ.classList.remove('active');
+                const nextNum = parseInt(qId.substring(1)) + 1;
+                const nextQ = document.getElementById('q' + nextNum);
+                if (nextQ) {
+                    nextQ.classList.add('active');
+                } else {
+                    document.getElementById('quiz-result').style.display = 'block';
+                }
+            }, 1000);
+        } else {
+            btn.classList.add('wrong');
+            setTimeout(() => {
+                options.forEach(opt => {
+                    opt.disabled = false;
+                    opt.classList.remove('wrong');
+                });
+            }, 1000);
+        }
+    }
+
+    // Модалка
+    const modal = document.getElementById('img-modal');
+    const modalImg = document.getElementById('modal-img');
+    document.querySelectorAll('.card img').forEach(img => {
+        img.onclick = () => {
+            modal.style.display = "flex";
+            modalImg.src = img.src;
+        }
+    });
+    modal.onclick = () => modal.style.display = "none";
+  const planArea = document.querySelector('textarea');
+
+// 1. При загрузке страницы проверяем: есть ли сохраненный текст?
+window.onload = () => {
+    if (localStorage.getItem('savedPlan')) {
+        planArea.value = localStorage.getItem('savedPlan');
+    }
+};
+
+// 2. Как только ребенок что-то печатает — сразу сохраняем
+planArea.oninput = () => {
+    localStorage.setItem('savedPlan', planArea.value);
+};
+</script>
+
+</body>
+</html>
